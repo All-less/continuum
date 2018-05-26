@@ -1,3 +1,4 @@
+
 [submodule "src/libs/rapidjson"]
 	path = src/libs/rapidjson
 	url = https://github.com/dcrankshaw/rapidjson.git
@@ -7,3 +8,12 @@
 [submodule "bin/yapf"]
 	path = bin/yapf
 	url = https://github.com/google/yapf.git
+[submodule "src/libs/redox"]
+	path = src/libs/redox
+	url = https://github.com/dcrankshaw/redox.git
+[submodule "src/libs/libev"]
+	path = src/libs/libev
+	url = https://github.com/enki/libev
+[submodule "src/libs/hiredis"]
+	path = src/libs/hiredis
+	url = https://github.com/redis/hiredis
