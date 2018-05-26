@@ -9,7 +9,6 @@
 #include <boost/bimap.hpp>
 #include <zmq.hpp>
 
-#include <continuum/containers.hpp>
 #include <continuum/datatypes.hpp>
 #include <continuum/metrics.hpp>
 #include <continuum/redis.hpp>

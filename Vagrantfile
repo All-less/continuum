@@ -9,7 +9,13 @@ Vagrant.configure("2") do |config|
 
   # As we need to patch redox, we exclude it from sync.
   config.vm.synced_folder ".", "/vagrant", type: "rsync",
-    rsync__exclude: [ ".git/", "debug/", "src/libs/redox" ]
+    rsync__exclude: [
+        ".git/", "debug/",
+        "src/libs/redox",
+        "src/libs/folly",
+        "src/libs/libev",
+        "src/libs/hiredis"
+    ]
 
   config.vm.box = "debian/testing64"
 

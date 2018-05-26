@@ -16,7 +16,7 @@ sudo apt install -yq autoconf autoconf-archive automake binutils-dev cmake g++-6
     python-pip curl
 echo 'export JZMQ_HOME=/usr/lib/x86_64-linux-gnu/jni' >> ~/.bashrc
 
-# path libev
+# patch libev
 cd $PROJ_ROOT/src/libs/libev
 git checkout 93823e6ca699df195a6c7b8bfa6006ec40ee0003
 git am --signoff < $PROJ_ROOT/src/libs/patches/rename_libev_symbol.patch
@@ -31,7 +31,7 @@ git am --signoff < $PROJ_ROOT/src/libs/patches/rename_hiredis_symbol.patch
 make
 sudo make install
 
-# patch redoxd
+# patch redox
 cd $PROJ_ROOT/src/libs/redox
 git checkout 2272f30f18890a6c18632ac3a862b0a879489b40
 git am --signoff < $PROJ_ROOT/src/libs/patches/rename_redox_symbol.patch
