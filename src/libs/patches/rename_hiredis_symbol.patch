@@ -1,0 +1,133 @@
+From 43a80f289b781d4fb7007d987ce6e41810dd3b3e Mon Sep 17 00:00:00 2001
+From: Loy <puregithub@yeah.net>
+Date: Sat, 24 Mar 2018 09:58:16 +0800
+Subject: [PATCH] change names of constants in libev
+
+---
+ adapters/libev.h         | 28 ++++++++++++++--------------
+ examples/example-libev.c |  4 ++--
+ 2 files changed, 16 insertions(+), 16 deletions(-)
+
+diff --git a/adapters/libev.h b/adapters/libev.h
+index 2bf8d52..53c629b 100644
+--- a/adapters/libev.h
++++ b/adapters/libev.h
+@@ -28,8 +28,8 @@
+  * POSSIBILITY OF SUCH DAMAGE.
+  */
+ 
+-#ifndef __HIREDIS_LIBEV_H__
+-#define __HIREDIS_LIBEV_H__
++#ifndef __HIREDIS_LIBLIBEV_H__
++#define __HIREDIS_LIBLIBEV_H__
+ #include <stdlib.h>
+ #include <sys/types.h>
+ #include <ev.h>
+@@ -43,8 +43,8 @@ typedef struct redisLibevEvents {
+     ev_io rev, wev;
+ } redisLibevEvents;
+ 
+-static void redisLibevReadEvent(EV_P_ ev_io *watcher, int revents) {
+-#if EV_MULTIPLICITY
++static void redisLibevReadEvent(LIBEV_P_ ev_io *watcher, int revents) {
++#if LIBEV_MULTIPLICITY
+     ((void)loop);
+ #endif
+     ((void)revents);
+@@ -53,8 +53,8 @@ static void redisLibevReadEvent(EV_P_ ev_io *watcher, int revents) {
+     redisAsyncHandleRead(e->context);
+ }
+ 
+-static void redisLibevWriteEvent(EV_P_ ev_io *watcher, int revents) {
+-#if EV_MULTIPLICITY
++static void redisLibevWriteEvent(LIBEV_P_ ev_io *watcher, int revents) {
++#if LIBEV_MULTIPLICITY
+     ((void)loop);
+ #endif
+     ((void)revents);
+@@ -69,7 +69,7 @@ static void redisLibevAddRead(void *privdata) {
+     ((void)loop);
+     if (!e->reading) {
+         e->reading = 1;
+-        ev_io_start(EV_A_ &e->rev);
++        ev_io_start(LIBEV_A_ &e->rev);
+     }
+ }
+ 
+@@ -79,7 +79,7 @@ static void redisLibevDelRead(void *privdata) {
+     ((void)loop);
+     if (e->reading) {
+         e->reading = 0;
+-        ev_io_stop(EV_A_ &e->rev);
++        ev_io_stop(LIBEV_A_ &e->rev);
+     }
+ }
+ 
+@@ -89,7 +89,7 @@ static void redisLibevAddWrite(void *privdata) {
+     ((void)loop);
+     if (!e->writing) {
+         e->writing = 1;
+-        ev_io_start(EV_A_ &e->wev);
++        ev_io_start(LIBEV_A_ &e->wev);
+     }
+ }
+ 
+@@ -99,7 +99,7 @@ static void redisLibevDelWrite(void *privdata) {
+     ((void)loop);
+     if (e->writing) {
+         e->writing = 0;
+-        ev_io_stop(EV_A_ &e->wev);
++        ev_io_stop(LIBEV_A_ &e->wev);
+     }
+ }
+ 
+@@ -110,7 +110,7 @@ static void redisLibevCleanup(void *privdata) {
+     free(e);
+ }
+ 
+-static int redisLibevAttach(EV_P_ redisAsyncContext *ac) {
++static int redisLibevAttach(LIBEV_P_ redisAsyncContext *ac) {
+     redisContext *c = &(ac->c);
+     redisLibevEvents *e;
+ 
+@@ -121,7 +121,7 @@ static int redisLibevAttach(EV_P_ redisAsyncContext *ac) {
+     /* Create container for context and r/w events */
+     e = (redisLibevEvents*)malloc(sizeof(*e));
+     e->context = ac;
+-#if EV_MULTIPLICITY
++#if LIBEV_MULTIPLICITY
+     e->loop = loop;
+ #else
+     e->loop = NULL;
+@@ -139,8 +139,8 @@ static int redisLibevAttach(EV_P_ redisAsyncContext *ac) {
+     ac->ev.data = e;
+ 
+     /* Initialize read/write events */
+-    ev_io_init(&e->rev,redisLibevReadEvent,c->fd,EV_READ);
+-    ev_io_init(&e->wev,redisLibevWriteEvent,c->fd,EV_WRITE);
++    ev_io_init(&e->rev,redisLibevReadEvent,c->fd,LIBEV_READ);
++    ev_io_init(&e->wev,redisLibevWriteEvent,c->fd,LIBEV_WRITE);
+     return REDIS_OK;
+ }
+ 
+diff --git a/examples/example-libev.c b/examples/example-libev.c
+index cc8b166..ccab97a 100644
+--- a/examples/example-libev.c
++++ b/examples/example-libev.c
+@@ -42,11 +42,11 @@ int main (int argc, char **argv) {
+         return 1;
+     }
+ 
+-    redisLibevAttach(EV_DEFAULT_ c);
++    redisLibevAttach(LIBEV_DEFAULT_ c);
+     redisAsyncSetConnectCallback(c,connectCallback);
+     redisAsyncSetDisconnectCallback(c,disconnectCallback);
+     redisAsyncCommand(c, NULL, NULL, "SET key %b", argv[argc-1], strlen(argv[argc-1]));
+     redisAsyncCommand(c, getCallback, (char*)"end-1", "GET key");
+-    ev_loop(EV_DEFAULT_ 0);
++    ev_loop(LIBEV_DEFAULT_ 0);
+     return 0;
+ }
+-- 
+2.6.2
+

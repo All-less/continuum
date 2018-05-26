@@ -1,0 +1,308 @@
+From 4f7f0a3d5e80b202e3bd8c4a00b80af17eef9417 Mon Sep 17 00:00:00 2001
+From: Loy <puregithub@yeah.net>
+Date: Sat, 24 Mar 2018 10:28:37 +0800
+Subject: [PATCH] change libev constants
+
+---
+ .gitignore               | 217 ++++++++++++++++++++++++++++++++++++++---------
+ include/redox/client.hpp |   2 +-
+ src/client.cpp           |  14 +--
+ 3 files changed, 184 insertions(+), 49 deletions(-)
+
+diff --git a/.gitignore b/.gitignore
+index 2a03973..c493a2d 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -1,41 +1,176 @@
+-# Compiled Object files
+-*.slo
+-*.lo
+-*.o
+-*.obj
+-
+-# Precompiled Headers
+-*.gch
+-*.pch
+-
+-# Compiled Dynamic libraries
+-*.so
+-*.dylib
+-*.dll
+-
+-# Fortran module files
+-*.mod
+-
+-# Compiled Static libraries
+-*.lai
+-*.la
+-*.a
+-*.lib
+-
+-# Executables
+-*.exe
+-*.out
+-*.app
+-
+-# CMake
+-build/
+-
+-# IntelliJ
+-.idea/
+-
+-# Todo file
+-TODO.md
+-
+-# Eclipse
+-.cproject
+-.project
++
++# Created by https://www.gitignore.io/api/vim,linux,emacs,macos,windows,sublimetext
++
++### Emacs ###
++# -*- mode: gitignore; -*-
++*~
++\#*\#
++/.emacs.desktop
++/.emacs.desktop.lock
++*.elc
++auto-save-list
++tramp
++.\#*
++
++# Org-mode
++.org-id-locations
++*_archive
++
++# flymake-mode
++*_flymake.*
++
++# eshell files
++/eshell/history
++/eshell/lastdir
++
++# elpa packages
++/elpa/
++
++# reftex files
++*.rel
++
++# AUCTeX auto folder
++/auto/
++
++# cask packages
++.cask/
++dist/
++
++# Flycheck
++flycheck_*.el
++
++# server auth directory
++/server/
++
++# projectiles files
++.projectile
++projectile-bookmarks.eld
++
++# directory configuration
++.dir-locals.el
++
++# saveplace
++places
++
++# url cache
++url/cache/
++
++# cedet
++ede-projects.el
++
++# smex
++smex-items
++
++# company-statistics
++company-statistics-cache.el
++
++# anaconda-mode
++anaconda-mode/
++
++### Linux ###
++
++# temporary files which can be created if a process still has a handle open of a deleted file
++.fuse_hidden*
++
++# KDE directory preferences
++.directory
++
++# Linux trash folder which might appear on any partition or disk
++.Trash-*
++
++# .nfs files are created when an open file is removed but is still being accessed
++.nfs*
++
++### macOS ###
++*.DS_Store
++.AppleDouble
++.LSOverride
++
++# Icon must end with two \r
++Icon
++
++# Thumbnails
++._*
++
++# Files that might appear in the root of a volume
++.DocumentRevisions-V100
++.fseventsd
++.Spotlight-V100
++.TemporaryItems
++.Trashes
++.VolumeIcon.icns
++.com.apple.timemachine.donotpresent
++
++# Directories potentially created on remote AFP share
++.AppleDB
++.AppleDesktop
++Network Trash Folder
++Temporary Items
++.apdisk
++
++### SublimeText ###
++# cache files for sublime text
++*.tmlanguage.cache
++*.tmPreferences.cache
++*.stTheme.cache
++
++# workspace files are user-specific
++*.sublime-workspace
++
++# project files should be checked into the repository, unless a significant
++# proportion of contributors will probably not be using SublimeText
++# *.sublime-project
++
++# sftp configuration file
++sftp-config.json
++
++# Package control specific files
++Package Control.last-run
++Package Control.ca-list
++Package Control.ca-bundle
++Package Control.system-ca-bundle
++Package Control.cache/
++Package Control.ca-certs/
++Package Control.merged-ca-bundle
++Package Control.user-ca-bundle
++oscrypto-ca-bundle.crt
++bh_unicode_properties.cache
++
++# Sublime-github package stores a github token in this file
++# https://packagecontrol.io/packages/sublime-github
++GitHub.sublime-settings
++
++### Vim ###
++# swap
++.sw[a-p]
++.*.sw[a-p]
++# session
++Session.vim
++# temporary
++.netrwhist
++# auto-generated tag files
++tags
++
++### Windows ###
++# Windows thumbnail cache files
++Thumbs.db
++ehthumbs.db
++ehthumbs_vista.db
++
++# Folder config file
++Desktop.ini
++
++# Recycle Bin used on file shares
++$RECYCLE.BIN/
++
++# Windows Installer files
++*.cab
++*.msi
++*.msm
++*.msp
++
++# Windows shortcuts
++*.lnk
++
++
++# End of https://www.gitignore.io/api/vim,linux,emacs,macos,windows,sublimetext
+diff --git a/include/redox/client.hpp b/include/redox/client.hpp
+index aceec96..5f3da0b 100644
+--- a/include/redox/client.hpp
++++ b/include/redox/client.hpp
+@@ -85,7 +85,7 @@ public:
+   * is off.
+   *
+   * Implementation note: When enabled, the event thread calls libev's ev_run in a
+-  * loop with the EVRUN_NOWAIT flag.
++  * loop with the LIBEVRUN_NOWAIT flag.
+   */
+   void noWait(bool state);
+ 
+diff --git a/src/client.cpp b/src/client.cpp
+index cb008dd..5c5bff5 100644
+--- a/src/client.cpp
++++ b/src/client.cpp
+@@ -188,7 +188,7 @@ void Redox::disconnectedCallback(const redisAsyncContext *ctx, int status) {
+ 
+ bool Redox::initEv() {
+   signal(SIGPIPE, SIG_IGN);
+-  evloop_ = ev_loop_new(EVFLAG_AUTO);
++  evloop_ = ev_loop_new(LIBEVFLAG_AUTO);
+   if (evloop_ == nullptr) {
+     setConnectState(INIT_ERROR);
+     return false;
+@@ -229,7 +229,7 @@ bool Redox::initHiredis() {
+ void Redox::noWait(bool state) { nowait_ = state; }
+ 
+ void breakEventLoop(struct ev_loop *loop, ev_async * /*async*/, int /*revents*/) {
+-  ev_break(loop, EVBREAK_ALL);
++  ev_break(loop, LIBEVBREAK_ALL);
+ }
+ 
+ int Redox::getConnectState() {
+@@ -272,8 +272,8 @@ void Redox::setExited(bool exited) {
+ void Redox::runEventLoop() {
+ 
+   // Events to connect to Redox
+-  ev_run(evloop_, EVRUN_ONCE);
+-  ev_run(evloop_, EVRUN_NOWAIT);
++  ev_run(evloop_, LIBEVRUN_ONCE);
++  ev_run(evloop_, LIBEVRUN_NOWAIT);
+ 
+   // Block until connected to Redis, or error
+   {
+@@ -308,7 +308,7 @@ void Redox::runEventLoop() {
+   // throughput by avoiding any sleeping
+   while (!to_exit_) {
+     if (nowait_) {
+-      ev_run(evloop_, EVRUN_NOWAIT);
++      ev_run(evloop_, LIBEVRUN_NOWAIT);
+     } else {
+       ev_run(evloop_);
+     }
+@@ -319,14 +319,14 @@ void Redox::runEventLoop() {
+ 
+   // Wait to receive server replies for clean hiredis disconnect
+   this_thread::sleep_for(chrono::milliseconds(10));
+-  ev_run(evloop_, EVRUN_NOWAIT);
++  ev_run(evloop_, LIBEVRUN_NOWAIT);
+ 
+   if (getConnectState() == CONNECTED) {
+     redisAsyncDisconnect(ctx_);
+   }
+ 
+   // Run once more to disconnect
+-  ev_run(evloop_, EVRUN_NOWAIT);
++  ev_run(evloop_, LIBEVRUN_NOWAIT);
+ 
+   // long created = commands_created_;
+   // long deleted = commands_deleted_;
+-- 
+2.6.2
+

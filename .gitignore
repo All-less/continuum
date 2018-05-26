@@ -1,0 +1,48 @@
+*.swp
+.color_coded
+.ycm_p
+.ycm_extra_conf.py
+*.pyc
+*.egg-info
+Pipfile.lock
+
+# build directories
+release/
+debug/
+.DS_STORE
+.idea/
+config.log
+target/
+_build/
+.vscode/
+
+# container
+*.project
+*.classpath
+*.settings/
+
+# scala
+dependency-reduced-pom.xml
+*.iml
+
+# redis
+*.rdb
+
+docker-compose.yml
+
+
+# Created by https://www.gitignore.io/api/vagrant
+
+### Vagrant ###
+.vagrant/
+*.box
+
+# End of https://www.gitignore.io/api/vagrant
+
+cmake-build-debug/
+
+# other
+*.ipynb
+
+# dependencies
+src/libs/folly
