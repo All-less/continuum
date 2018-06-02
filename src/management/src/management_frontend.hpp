@@ -563,7 +563,7 @@ class RequestHandler {
     parse_json(json, d);
 
     std::string app_name = get_string(d, "app_name");
-    std::vector<string> model_names = get_string_array(d, "model_names");
+    std::vector<std::string> model_names = get_string_array(d, "model_names");
 
     // Confirm that the app exists
     auto app_info =
@@ -874,7 +874,7 @@ class RequestHandler {
     std::vector<std::string> linked_models;
 
     if (verbose) {
-      for (const string& app_name : app_names) {
+      for (const std::string& app_name : app_names) {
         std::unordered_map<std::string, std::string> app_metadata =
             continuum::redis::get_application(redis_connection_, app_name);
         rapidjson::Document app_doc(&response_doc.GetAllocator());
@@ -888,7 +888,7 @@ class RequestHandler {
         response_doc.PushBack(app_doc, response_doc.GetAllocator());
       }
     } else {
-      for (const string& app_name : app_names) {
+      for (const std::string& app_name : app_names) {
         rapidjson::Value v;
         v.SetString(app_name.c_str(), app_name.length(),
                     response_doc.GetAllocator());
@@ -1304,8 +1304,8 @@ class RequestHandler {
    * Attempts to update the version of model with name `model_name` to
    * `new_model_version`.
    */
-  void attempt_model_version_update(const string& model_name,
-                                    const string& new_model_version) {
+  void attempt_model_version_update(const std::string& model_name,
+                                    const std::string& new_model_version) {
     if (!continuum::redis::set_current_model_version(
             redis_connection_, model_name, new_model_version)) {
       std::stringstream ss;

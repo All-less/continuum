@@ -10,6 +10,7 @@ add_library(continuum
     src/retrain_policies.cpp
     src/persistent_state.cpp
     src/rpc_backend_service.cpp
+    src/selection_policies.cpp
     src/timers.cpp
     src/redis.cpp
     src/logging.cpp
