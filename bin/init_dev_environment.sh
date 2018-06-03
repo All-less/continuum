@@ -37,9 +37,12 @@ git checkout 2272f30f18890a6c18632ac3a862b0a879489b40
 git am --signoff < $PROJ_ROOT/src/libs/patches/rename_redox_symbol.patch
 
 # download folly
-cd $PROJ_ROOT/src/libs
+cd /vagrant/src/libs
 git clone https://github.com/facebook/folly.git
-cd folly/folly
+cd /vagrant/src/libs/folly
+git checkout 62e3abb2f1ec5c5041a4aa0fa7744ae46f6d25d7
+cd /vagrant/src/libs/folly/folly
+
 autoreconf -ivf
 ./configure
 make
@@ -55,4 +58,4 @@ make
 cd $PROJ_ROOT/backends/python
 pip install -r requirements.txt
 
-../bin/run_unittests.sh
+${PROJ_ROOT}/bin/run_unittests.sh

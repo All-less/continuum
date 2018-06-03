@@ -18,13 +18,6 @@ build_project() {
     make
 }
 
-start_query_frontend() {
-    $CONTINUUM_ROOT/debug/src/frontends/query_frontend >${LOG_DIR}/query_frontend.log 2>&1 &
-    QUREY_PID="$!"
-    echo "query_frontend started! PID : $QUREY_PID"
-    echo "$QUREY_PID " >> ${PID_FILE}
-}
-
 start_data_frontend() {
     $CONTINUUM_ROOT/debug/src/frontends/data_frontend >${LOG_DIR}/data_frontend.log 2>&1 &
     DATA_PID="$!"
@@ -79,7 +72,6 @@ start_all() {
     start_redis
     flush_redis
 
-    start_query_frontend
     start_management_frontend
     start_data_frontend
     start_celery

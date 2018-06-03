@@ -6,7 +6,6 @@
 #include <continuum/datatypes.hpp>
 #include <continuum/exceptions.hpp>
 #include <continuum/json_util.hpp>
-#include <continuum/query_processor.hpp>
 
 #include "management_frontend.hpp"
 
