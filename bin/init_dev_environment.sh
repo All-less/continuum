@@ -6,56 +6,111 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PROJ_ROOT=$DIR/..
 cd $PROJ_ROOT
 
-# install dependencies
-sudo apt update -yq
-sudo apt install -yq autoconf autoconf-archive automake binutils-dev cmake g++-6 \
-    git libboost-all-dev libdouble-conversion-dev libdwarf-dev libelf-dev libevent-dev \
-    libgflags-dev libgoogle-glog-dev libiberty-dev libjemalloc-dev liblz4-dev liblzma-dev \
-    libsnappy-dev libssl-dev libtool libunwind8-dev libzmq-jni libzmq3-dev make maven \
-    openjdk-8-jdk pkg-config python-numpy python-zmq python-redis redis-server zlib1g-dev \
-    python-pip curl
-echo 'export JZMQ_HOME=/usr/lib/x86_64-linux-gnu/jni' >> ~/.bashrc
+function usage {
+    cat <<EOF
+    usage: init_dev_environment.sh
 
-# patch libev
-cd $PROJ_ROOT/src/libs/libev
-git checkout 93823e6ca699df195a6c7b8bfa6006ec40ee0003
-git am --signoff < $PROJ_ROOT/src/libs/patches/rename_libev_symbol.patch
-./configure
-make
-sudo make install
+    This script is used to install Continuum dependencies. By default, it will fully
+    bootstrap a development environment.
 
-# patch hiredis
-cd $PROJ_ROOT/src/libs/hiredis
-git checkout 3d8709d19d7fa67d203a33c969e69f0f1a4eab02
-git am --signoff < $PROJ_ROOT/src/libs/patches/rename_hiredis_symbol.patch
-make
-sudo make install
+    Options:
 
-# patch redox
-cd $PROJ_ROOT/src/libs/redox
-git checkout 2272f30f18890a6c18632ac3a862b0a879489b40
-git am --signoff < $PROJ_ROOT/src/libs/patches/rename_redox_symbol.patch
+    -a, --all                   Install all dependencies.
+    -s, --system                Install system dependencies.
+    -l, --library               Install third-party libraries.
+    -h, --help                  Display this message and exit.
 
-# download folly
-cd /vagrant/src/libs
-git clone https://github.com/facebook/folly.git
-cd /vagrant/src/libs/folly
-git checkout 62e3abb2f1ec5c5041a4aa0fa7744ae46f6d25d7
-cd /vagrant/src/libs/folly/folly
+$@
+EOF
+}
 
-autoreconf -ivf
-./configure
-make
-sudo make install
+function ensure_non_empty {
+    if [[ -z "$(ls -A $1)" ]]; then
+        echo "Error: $1 is empty."
+        exit 1
+    fi
+}
 
-# build project
-cd $PROJ_ROOT
-./configure
-cd debug/
-make
+function install_system_dependencies {
+    sudo apt update -yq
+    sudo apt install -yq autoconf autoconf-archive automake binutils-dev cmake g++-6 \
+        git libboost-all-dev libdouble-conversion-dev libdwarf-dev libelf-dev libevent-dev \
+        libgflags-dev libgoogle-glog-dev libiberty-dev libjemalloc-dev liblz4-dev liblzma-dev \
+        libsnappy-dev libssl-dev libtool libunwind8-dev libzmq-jni libzmq3-dev make curl \
+        pkg-config python-numpy python-zmq python-redis redis-server zlib1g-dev \
+        python-pip
+}
 
-# install backend dependencies
-cd $PROJ_ROOT/backends/python
-pip install -r requirements.txt
+function install_third_party {
+    # patch libev
+    LIBEV_DIR=$PROJ_ROOT/src/libs/libev
+    ensure_non_empty $LIBEV_DIR
+    cd ${LIBEV_DIR}
+    git checkout 93823e6ca699df195a6c7b8bfa6006ec40ee0003
+    git apply $PROJ_ROOT/src/libs/patches/rename_libev_symbol.patch
+    ./configure
+    make
+    sudo make install
 
-${PROJ_ROOT}/bin/run_unittests.sh
+    # patch hiredis
+    HIREDIS_DIR=$PROJ_ROOT/src/libs/hiredis
+    ensure_non_empty $HIREDIS_DIR
+    cd ${HIREDIS_DIR}
+    git checkout 3d8709d19d7fa67d203a33c969e69f0f1a4eab02
+    git apply $PROJ_ROOT/src/libs/patches/rename_hiredis_symbol.patch
+    make
+    sudo make install
+
+    # patch redox
+    REDOX_DIR=$PROJ_ROOT/src/libs/redox
+    ensure_non_empty $REDOX_DIR
+    cd ${REDOX_DIR}
+    git checkout 2272f30f18890a6c18632ac3a862b0a879489b40
+    git apply $PROJ_ROOT/src/libs/patches/rename_redox_symbol.patch
+
+    # download folly
+    cd $PROJ_ROOT/src/libs
+    git clone https://github.com/facebook/folly.git
+    cd $PROJ_ROOT/src/libs/folly
+    git checkout 62e3abb2f1ec5c5041a4aa0fa7744ae46f6d25d7
+    cd $PROJ_ROOT/src/libs/folly/folly
+
+    autoreconf -ivf
+    ./configure
+    make
+    sudo make install
+}
+
+function build_project {
+    # build project
+    cd $PROJ_ROOT
+    ./configure
+    cd debug/
+    make
+
+    # install backend dependencies
+    cd $PROJ_ROOT/backends/python
+    pip install -r requirements.txt
+}
+
+function install_all {
+    install_system_dependencies
+    install_third_party
+    build_project
+}
+
+if [[ "$#" == 0 ]]; then
+  ARGS="--all"
+else
+  ARGS=$1
+fi
+
+case $ARGS in
+    -a | --all )     install_all
+                     ;;
+    -s | --system )  install_system_dependencies
+                     ;;
+    -l | --library ) install_third_party
+                     ;;
+    * )              usage
+esac

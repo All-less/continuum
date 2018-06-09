@@ -9,11 +9,11 @@ function usage {
     usage: run_unittests.sh
 
     This script is used to run Continuum tests. By default, it will run all possible
-    tests
+    tests.
 
     Options:
 
-    -a, --all                   Run all tests
+    -a, --all                   Run all tests.
     -l, --libcontinuum          Run tests only for libcontinuum folder.
     -m, --management            Run tests only for management folder.
     -f, --frontend              Run tests only for frontend folder.

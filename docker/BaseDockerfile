@@ -1,0 +1,15 @@
+FROM debian:buster-slim
+
+LABEL "maintainer" "All-less<all.less.mail@gmail.com>"
+
+WORKDIR /opt
+
+RUN apt update -yq \
+    && apt install -yq git sudo \
+    && git clone https://github.com/All-less/continuum.git \
+    && cd /opt/continuum
+    && git submodule update --init --recursive \
+    && bash bin/init_dev_environment.sh
+
+ENTRYPOINT /bin/bash
+CMD []
