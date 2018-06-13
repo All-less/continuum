@@ -1,7 +1,10 @@
 language: cpp
 
+services:
+  - redis-server
+
 install:
-  - bin/init_dev_environment.sh
+  - bash bin/init_dev_environment.sh
 
 script:
-  - bin/run_unittests.sh
+  - bash bin/run_unittests.sh

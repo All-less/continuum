@@ -23,6 +23,8 @@ def get_args():
         '--backend-module', type=str, default='test_entries', choices=backend_names)
     parser.add_argument('--continuum-host', type=str)
     parser.add_argument('--continuum-port', type=int)
+    parser.add_argument('--redis-host', type=str)
+    parser.add_argument('--redis-port', type=int)
     parser.add_argument('--backend-version', type=str)
     parser.add_argument('--backend-name', type=str)
     parser.add_argument('--app-name', type=str)

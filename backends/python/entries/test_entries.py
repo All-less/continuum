@@ -16,6 +16,8 @@ def fetch():
 def main(rpc_service,
          continuum_host='localhost',
          continuum_port=7001,
+         redis_host='localhost',
+         redis_port=6379,
          backend_name='test',
          backend_version='1.0',
          backend_module='test_entries',
