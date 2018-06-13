@@ -28,8 +28,6 @@ dependency-reduced-pom.xml
 # redis
 *.rdb
 
-docker-compose.yml
-
 
 # Created by https://www.gitignore.io/api/vagrant
 

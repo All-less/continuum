@@ -75,6 +75,9 @@ class RequestHandler {
       std::this_thread::sleep_for(std::chrono::seconds(1));
     }
 
+    continuum::redis::send_cmd_no_reply<std::string>(
+        redis_connection_, {"CONFIG", "SET", "notify-keyspace-events", "AKE"});
+
     continuum::redis::subscribe_to_application_changes(
         redis_subscriber_,
         [this](const std::string& key, const std::string& event_type) {

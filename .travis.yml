@@ -1,0 +1,7 @@
+language: cpp
+
+install:
+  - bin/init_dev_environment.sh
+
+script:
+  - bin/run_unittests.sh

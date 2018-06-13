@@ -7,7 +7,7 @@ WORKDIR /opt
 RUN apt update -yq \
     && apt install -yq git sudo \
     && git clone https://github.com/All-less/continuum.git \
-    && cd /opt/continuum
+    && cd /opt/continuum \
     && git submodule update --init --recursive \
     && bash bin/init_dev_environment.sh
 
