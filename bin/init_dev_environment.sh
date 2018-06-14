@@ -33,12 +33,45 @@ function ensure_non_empty {
 
 function install_system_dependencies {
     sudo apt update -yq
-    sudo apt install -yq autoconf autoconf-archive automake binutils-dev cmake g++-6 \
-        git libboost-all-dev libdouble-conversion-dev libdwarf-dev libelf-dev libevent-dev \
-        libgflags-dev libgoogle-glog-dev libiberty-dev libjemalloc-dev liblz4-dev liblzma-dev \
-        libsnappy-dev libssl-dev libtool libunwind8-dev libzmq-jni libzmq3-dev make curl \
-        pkg-config python-numpy python-zmq python-redis redis-server zlib1g-dev \
-        python-pip
+    sudo apt install -yq \
+        # folly dependencies
+        g++-6 \
+        binutils-dev \
+        libboost-all-dev \
+        libdouble-conversion-dev \
+        libdwarf-dev \
+        libelf-dev \
+        libevent-dev \
+        libgflags-dev \
+        libgoogle-glog-dev \
+        libiberty-dev \
+        libjemalloc-dev \
+        liblz4-dev \
+        liblzma-dev \
+        libsnappy-dev \
+        libssl-dev \
+        libunwind8-dev \
+        pkg-config \
+        zlib1g-dev \
+        make \
+        # ZeroMQ for RPC
+        libzmq-jni \
+        libzmq3-dev \
+        # Redis
+        redis-server \
+        # Python for backends
+        python-numpy \
+        python-zmq \
+        python-redis \
+        python-pip \
+        # other build tools
+        libtool \
+        autoconf \
+        autoconf-archive \
+        automake \
+        cmake \
+        git \
+        curl 
 }
 
 function install_third_party {
