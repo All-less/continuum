@@ -38,5 +38,5 @@ def main(rpc_service,
         NaiveBestEffortPolicy
         ManualPolicy
     """
-    rpc_service.start(continuum_host, continuum_port, backend_name, backend_version, \
-                      backend_module, app_name, policy_name, input_type, params)
+    rpc_service.start(continuum_host, continuum_port, backend_name, backend_version, redis_host, \
+                      redis_port, backend_module, app_name, policy_name, input_type, params)

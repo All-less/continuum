@@ -32,7 +32,6 @@ class Server(threading.Thread):
         self.last_active_time = datetime.now()
         self.connected = False
         self.poller = zmq.Poller()
-        self._redis_service = database.RedisService(REDIS_HOST, REDIS_PORT)
 
     def run(self):
         logger.info('Start waiting for new messages.')
@@ -117,7 +116,7 @@ class Server(threading.Thread):
             batch_ids = np.array(
                 retrain_content.split('\0')[:-1], dtype=np.str)
             logger.debug('Received batch ids {}'.format(batch_ids))
-            data = self._redis_service.get_data_by_ids(batch_ids)
+            data = self.redis_service.get_data_by_ids(batch_ids)
             if env['is_training']:
                 remote.abort_retrain()
                 time.sleep(3)  # give the process some time to clean up
@@ -139,7 +138,7 @@ class RPCService:
     def __init__(self):
         pass
 
-    def start(self, host, port, backend_name, backend_version, \
+    def start(self, host, port, backend_name, backend_version, redis_host, redis_port \
               backend_module, app_name, policy, input_type, param_dict={}):
         """
         Args:
@@ -158,6 +157,7 @@ class RPCService:
         self.server.backend_name = backend_name
         self.server.backend_version = backend_version
         self.server.backend_module = backend_module
+        self.server.redis_service = database.RedisService(redis_host, redis_port)
         self.server.policy = policy
         self.server.app_name = app_name
         self.server.input_type = input_type

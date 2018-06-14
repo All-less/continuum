@@ -1,4 +1,4 @@
-version: '3'
+version: '3.5'
 
 services:
   redis:
@@ -16,7 +16,7 @@ services:
         condition: on-failure
 
   data_frontend:
-    image: 'allless/continuum:0.3'
+    image: 'allless/continuum:0.5'
     ports:
       - '1339:1339'
       - '7001:7001'
@@ -30,7 +30,7 @@ services:
       - redis
 
   management_frontend:
-    image: 'allless/continuum:0.3'
+    image: 'allless/continuum:0.4'
     ports:
       - '1338:1338'
     networks:
@@ -42,16 +42,8 @@ services:
       - --redis_ip
       - redis
 
-  backend:
-    image: 'allless/continuum:0.3'
-    networks:
-      - continuum
-    depends_on:
-      - data_frontend
-    entrypoint:
-      - bash
-      - /opt/continuum/bin/start_backend.sh
-
 networks:
   continuum:
-
+    driver: overlay
+    attachable: true
+    name: continuum-network

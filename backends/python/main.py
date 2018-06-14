@@ -48,8 +48,9 @@ def process_args(args):
     arg_vars = vars(args)
     copy_keys(arg_vars, params, ['alpha', 'beta', 'weight'])
     kwargs = {}
-    copy_keys(arg_vars, kwargs, ['backend_module', 'backend_name',
-                                 'app_name', 'policy_name'])
+    copy_keys(arg_vars, kwargs, ['backend_module', 'backend_name', 'backend_version',
+                                 'app_name', 'policy_name', 'continuum_host',
+                                 'continuum_port', 'redis_host', 'redis_port'])
     if params:
         kwargs['params'] = params
     return kwargs

@@ -1,0 +1,14 @@
+version: '3.5'
+
+services:
+  backend:
+    image: 'allless/continuum:0.6'
+    networks:
+      - continuum-network
+    entrypoint:
+      - bash
+      - /opt/continuum/bin/start_backend.sh
+
+networks:
+  continuum-network:
+    external: true
