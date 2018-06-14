@@ -1,12 +1,14 @@
 ## Continuum
 
-A plaform for online learning that cuts data latency and saves you cost.
+A plaform for online learning that curtails data latency and saves you cost.
 
-#### Preview
+### Technical Preview
+
+WARNING: The project is in pre-alpha state. Please use with caution.
 
 It is recommended to run Continuum with [Docker 18.03+](https://docs.docker.com/release-notes/docker-ce/). Following is a basic walkthrough.
 
-```
+```bash
 git clone https://github.com/All-less/continuum.git
 cd continuum
 
@@ -33,6 +35,6 @@ curl -X POST \
 
 ```
 
-#### Acknowledgement
+### Acknowledgement
 
 The project is inspired by [Clipper](http://clipper.ai/).
