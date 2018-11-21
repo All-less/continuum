@@ -1,6 +1,6 @@
 ## Continuum
 
-A plaform for online learning that curtails data latency and saves you cost.
+A platform for online learning that curtails data latency and saves you cost. For the design information, please refer to the paper [Continuum: A Platform for Cost-Aware, Low-Latency Continual Learning](https://dl.acm.org/citation.cfm?id=3267817).
 
 ### Technical Preview
 
