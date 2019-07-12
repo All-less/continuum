@@ -33,11 +33,11 @@ function ensure_non_empty {
 
 function install_system_dependencies {
     sudo apt update -yq
+
     # folly dependencies
     sudo apt install -yq \
         g++-6 \
         binutils-dev \
-        libboost-all-dev \
         libdouble-conversion-dev \
         libdwarf-dev \
         libelf-dev \
@@ -54,18 +54,22 @@ function install_system_dependencies {
         pkg-config \
         zlib1g-dev \
         make
+
     # ZeroMQ for RPC
     sudo apt install -yq \
         libzmq-jni \
         libzmq3-dev
+
     # Redis
     sudo apt install -yq redis-server
+
     # Python for backends
     sudo apt install -yq \
         python-numpy \
         python-zmq \
         python-redis \
         python-pip
+
     # other build tools
     sudo apt install -yq \
         libtool \
@@ -75,6 +79,15 @@ function install_system_dependencies {
         cmake \
         git \
         curl 
+
+    # We install boost 1.58 because 1.68 will result in compilation error.
+    sudo apt install -yq wget
+    cd /opt
+    wget http://sourceforge.net/projects/boost/files/boost/1.58.0/boost_1_58_0.tar.gz
+    tar xzvf boost_1_58_0.tar.gz 
+    cd boost_1_58_0
+    ./bootstrap.sh
+    ./b2 install
 }
 
 function install_third_party {
