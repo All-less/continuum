@@ -138,7 +138,7 @@ class RPCService:
     def __init__(self):
         pass
 
-    def start(self, host, port, backend_name, backend_version, redis_host, redis_port \
+    def start(self, host, port, backend_name, backend_version, redis_host, redis_port, \
               backend_module, app_name, policy, input_type, param_dict={}):
         """
         Args:

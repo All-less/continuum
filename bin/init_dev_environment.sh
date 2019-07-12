@@ -33,8 +33,8 @@ function ensure_non_empty {
 
 function install_system_dependencies {
     sudo apt update -yq
+    # folly dependencies
     sudo apt install -yq \
-        # folly dependencies
         g++-6 \
         binutils-dev \
         libboost-all-dev \
@@ -53,18 +53,21 @@ function install_system_dependencies {
         libunwind8-dev \
         pkg-config \
         zlib1g-dev \
-        make \
-        # ZeroMQ for RPC
+        make
+    # ZeroMQ for RPC
+    sudo apt install -yq \
         libzmq-jni \
-        libzmq3-dev \
-        # Redis
-        redis-server \
-        # Python for backends
+        libzmq3-dev
+    # Redis
+    sudo apt install -yq redis-server
+    # Python for backends
+    sudo apt install -yq \
         python-numpy \
         python-zmq \
         python-redis \
-        python-pip \
-        # other build tools
+        python-pip
+    # other build tools
+    sudo apt install -yq \
         libtool \
         autoconf \
         autoconf-archive \

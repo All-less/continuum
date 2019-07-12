@@ -2,7 +2,7 @@ version: '3.5'
 
 services:
   backend:
-    image: 'allless/continuum:0.6'
+    image: 'allless/continuum:0.1'
     networks:
       - continuum-network
     entrypoint:
