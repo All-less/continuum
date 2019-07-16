@@ -78,16 +78,17 @@ function install_system_dependencies {
         automake \
         cmake \
         git \
-        curl 
+        curl
 
-    # We install boost 1.58 because 1.68 will result in compilation error.
+    # We install boost 1.65 because 1.66+ will result in compilation error.
     sudo apt install -yq wget
     cd /opt
-    wget http://sourceforge.net/projects/boost/files/boost/1.58.0/boost_1_58_0.tar.gz
-    tar xzvf boost_1_58_0.tar.gz 
-    cd boost_1_58_0
+    wget https://dl.bintray.com/boostorg/release/1.65.1/source/boost_1_65_1.tar.gz
+    tar xzvf boost_1_65_1.tar.gz
+    cd boost_1_65_1
     ./bootstrap.sh
     ./b2 install
+    export LD_LIBRARY_PATH=/usr/local/lib
 }
 
 function install_third_party {
@@ -129,6 +130,8 @@ function install_third_party {
     make
     sudo make install
 }
+
+
 
 function build_project {
     # build project
