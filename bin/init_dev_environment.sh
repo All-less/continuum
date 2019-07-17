@@ -80,15 +80,15 @@ function install_system_dependencies {
         git \
         curl
 
-    # We install boost 1.65 because 1.66+ will result in compilation error.
-    sudo apt install -yq wget
+    # We install boost 1.65 because 1.66+ will result in compilation error. More concretely,
+    # boost 1.66+ introduces a new class `signal_set`, whereas `signal_set` has been defined
+    # as a macro in libevent.
     cd /opt
-    wget https://dl.bintray.com/boostorg/release/1.65.1/source/boost_1_65_1.tar.gz
+    curl -L https://dl.bintray.com/boostorg/release/1.65.1/source/boost_1_65_1.tar.gz -o boost_1_65_1.tar.gz
     tar xzvf boost_1_65_1.tar.gz
     cd boost_1_65_1
     ./bootstrap.sh
-    ./b2 install
-    export LD_LIBRARY_PATH=/usr/local/lib
+    ./b2 install --prefix=/usr
 }
 
 function install_third_party {

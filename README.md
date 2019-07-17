@@ -19,21 +19,26 @@ docker swarm init
 docker stack deploy -c docker/docker-compose-frontend.yml continuum-frontend
 
 # register application "test-app"
-curl -X POST \                                    
+curl -X POST \
         --header "Content-Type:application/json" \
         -d '{"name":"test-app", "input_type":"doubles", "default_output":"-1.0", "latency_slo_micros":100000 }' \
         http://0.0.0.0:1338/admin/add_app
-  
-# deploy backends
+
+# deploy a dumb backend
 docker stack deploy -c docker/docker-compose-backend.yml continuum-backend
 
-# send data to perform retrain
+# send data to trigger retraining
 curl -X POST \
         --header "Content-Type:application/json" \
         -d '{"data":[[1.0, 2.0]]}'\
         http://0.0.0.0:1339/test-app/upload
-
 ```
+
+### Troubleshooting
+
+After deploying the stack, check `docker service ls` to see whether the replicas are running normally. If not, something unexpected has happened during booting the containers.
+
+When all containers are up and running, use `docker service logs <service_name>` to look at runtime logs of all components.
 
 ### Acknowledgement
 
