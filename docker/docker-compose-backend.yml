@@ -2,12 +2,12 @@ version: '3.5'
 
 services:
   backend:
-    image: 'allless/continuum:0.2'
+    image: 'allless/continuum:latest'
     networks:
       - continuum-network
     environment:
-      - REDIS_HOST: redis
-      - REDIS_PORT: 6379
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
     entrypoint:
       - bash
       - /opt/continuum/bin/start_backend.sh

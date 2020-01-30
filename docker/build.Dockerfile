@@ -1,4 +1,4 @@
-FROM allless/continuum-base:0.1
+FROM allless/continuum-base:latest
 
 LABEL "maintainer" "All-less<all.less.mail@gmail.com>"
 

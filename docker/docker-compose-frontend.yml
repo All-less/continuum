@@ -16,7 +16,7 @@ services:
         condition: on-failure
 
   data_frontend:
-    image: 'allless/continuum:0.2'
+    image: 'allless/continuum:latest'
     ports:
       - '1339:1339'
       - '7001:7001'
@@ -30,7 +30,7 @@ services:
       - redis
 
   management_frontend:
-    image: 'allless/continuum:0.2'
+    image: 'allless/continuum:latest'
     ports:
       - '1338:1338'
     networks:
