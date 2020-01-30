@@ -1,14 +1,19 @@
 # coding: utf-8
+import os
 import sys
 from os.path import abspath, dirname, join
 import importlib
 
 from celery import Celery
 
+
+redis_host = os.getenv('REDIS_HOST', 'localhost')
+redis_port = os.getenv('REDIS_ENV', 6379)
+
 app = Celery(
-    'continuum-backend', 
-    broker='redis://localhost', 
-    backend='redis://',
+    'continuum-backend',
+    broker='redis://{}:{}'.format(redis_host, redis_port),
+    backend='redis://{}:{}'.format(redis_host, redis_port),
     task_acks_late=True)
 
 

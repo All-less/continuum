@@ -18,6 +18,7 @@ function usage {
     -a, --all                   Install all dependencies.
     -s, --system                Install system dependencies.
     -l, --library               Install third-party libraries.
+    -b, --build                 Build Continuum.
     -h, --help                  Display this message and exit.
 
 $@
@@ -163,6 +164,8 @@ case $ARGS in
     -s | --system )  install_system_dependencies
                      ;;
     -l | --library ) install_third_party
+                     ;;
+    -b | --build )   build_project
                      ;;
     * )              usage
 esac

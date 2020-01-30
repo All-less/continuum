@@ -9,7 +9,8 @@ RUN apt update -yq \
     && git clone https://github.com/All-less/continuum.git \
     && cd /opt/continuum \
     && git submodule update --init --recursive \
-    && bash bin/init_dev_environment.sh
+    && bash bin/init_dev_environment.sh -s \
+    && bash bin/init_dev_environment.sh -l
 
 ENTRYPOINT /bin/bash
 CMD []
